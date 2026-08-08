@@ -1,0 +1,105 @@
+---
+title: "Stroke Prediction Using Machine Learning"
+author: "Tinsae Abdeta"
+output: html_document
+---
+
+# Project Overview
+
+This notebook presents the complete machine learning workflow for stroke prediction using the Healthcare Stroke Prediction Dataset. The analysis follows the CRISP-DM framework and includes data understanding, preprocessing, feature engineering, feature selection, modeling, evaluation, and visualization.
+
+# 1. Business Understanding
+
+Stroke prediction is an important healthcare problem because early identification of individuals at elevated risk may support preventive interventions. This project evaluates machine learning approaches for identifying stroke risk while addressing class imbalance and model interpretability.
+
+# 2. Data Understanding
+
+The dataset contains demographic, behavioral, and clinical variables associated with stroke risk.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(caret)
+library(randomForest)
+library(pROC)
+library(DMwR2)
+
+set.seed(123)
+```
+
+```{r load-data}
+stroke <- read.csv("../data/healthcare-dataset-stroke-data.csv")
+
+dim(stroke)
+str(stroke)
+summary(stroke)
+table(stroke$stroke)
+```
+
+# 3. Data Preparation
+
+Data preparation includes missing-value assessment, categorical-variable processing, training and testing partitioning, and prevention of information leakage.
+
+Detailed preprocessing procedures are contained in:
+
+`../scripts/01_data_preprocessing.R`
+
+# 4. Exploratory Data Analysis and Feature Engineering
+
+Exploratory analysis examines relationships between stroke status and important clinical and demographic characteristics. Engineered predictors include age groups, BMI categories, glucose categories, cardiovascular risk indicators, and interaction variables.
+
+Detailed procedures are contained in:
+
+`../scripts/02_eda_feature_engineering.R`
+
+# 5. Training and Testing
+
+The data are separated before preprocessing. Missing-value statistics are estimated from training data and subsequently applied to unseen data. SMOTE is restricted to the training data to prevent information leakage.
+
+Detailed procedures are contained in:
+
+`../scripts/03_split_preprocessing_smote.R`
+
+# 6. Feature Selection and Modeling
+
+Two feature-selection approaches are compared:
+
+1. Random Forest feature importance
+2. Recursive Feature Elimination (RFE)
+
+Random Forest models are then evaluated using the selected predictors.
+
+Detailed modeling procedures are contained in:
+
+`../scripts/04_feature_selection_modeling.R`
+
+# 7. Model Evaluation
+
+Because stroke represents a small minority of observations, overall accuracy alone is not considered sufficient. Model evaluation emphasizes recall, precision, F1-score, balanced accuracy, and ROC-AUC.
+
+Classification thresholds are evaluated to improve identification of stroke cases while considering the trade-off between sensitivity and false-positive predictions.
+
+Detailed evaluation procedures are contained in:
+
+`../scripts/05_threshold_evaluation_visualization.R`
+
+# 8. Results and Interpretation
+
+The analysis demonstrates the importance of feature engineering and feature selection when modeling highly imbalanced healthcare data. Age, glucose measures, BMI, cardiovascular conditions, and engineered interaction variables contributed substantially to stroke prediction.
+
+Recursive Feature Elimination improved identification of stroke cases compared with the Random Forest importance approach. However, the model continued to produce false-positive predictions and missed some stroke cases. Therefore, the results should be interpreted as evidence of predictive potential rather than as a clinically deployable diagnostic model.
+
+# 9. Reproducibility
+
+The project supports reproducibility through:
+
+- Modular R scripts
+- A documented CRISP-DM workflow
+- Fixed random seeds
+- Training-only preprocessing
+- Publicly available data and code
+- Documented software dependencies
+- Consistent model evaluation procedures
+
+# 10. Conclusion
+
+This project demonstrates a reproducible machine learning workflow for stroke prediction. Feature engineering, appropriate feature selection, class-imbalance management, and clinically meaningful evaluation metrics are essential for developing useful healthcare prediction models. Future research should validate the approach using larger and more diverse clinical datasets.
