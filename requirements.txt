@@ -1,0 +1,15 @@
+R >= 4.3.0
+
+Required R packages:
+tidyverse
+caret
+randomForest
+DMwR2
+pROC
+ggplot2
+dplyr
+tidyr
+recipes
+themis
+rmarkdown
+knitr
